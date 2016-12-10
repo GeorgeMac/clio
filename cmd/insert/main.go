@@ -39,7 +39,6 @@ func main() {
 	build := uuid.NewV4()
 	log.Println("build: ", build)
 
-	stamp := time.Now().Unix()
 	for i := int64(0); i < int64(count); i++ {
 		payload := fmt.Sprintf("skdfjhd fskdjfh skjdf skjdhf sjkdhf %d", i)
 		line := storage.SysLogLineV0{
@@ -52,8 +51,7 @@ func main() {
 			Data: []byte(payload),
 		}
 
-		stamp += 1000
-		if err := store.Put(&line, i); err != nil {
+		if err := store.Write(&line); err != nil {
 			log.Println(err)
 		}
 	}

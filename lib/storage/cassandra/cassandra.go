@@ -7,16 +7,17 @@ import (
 
 // Storage wraps a connection to cassandra and implements
 // the storage.Storage interface. It can be used to store
-// implementations of Line within Cassandra.
+// implementations of Line within Cassandra
 type Storage struct {
 	cluster *gocql.ClusterConfig
 	session *gocql.Session
 }
 
 // Option is a function which takes a pointer to a storage type
-// It is used to configure the cassandra.Storage type on construction.
+// It is used to configure the cassandra.Storage type on construction
 type Option func(s *Storage)
 
+// Credentials sets a usename and password on the connection to Cassandra
 func Credentials(username, password string) Option {
 	return func(s *Storage) {
 		s.cluster.Authenticator = gocql.PasswordAuthenticator{
@@ -26,7 +27,7 @@ func Credentials(username, password string) Option {
 	}
 }
 
-// Keyspace is a storage option for overriding the default keyspace.
+// Keyspace is a storage option for overriding the default keyspace
 func Keyspace(keyspace string) Option {
 	return func(s *Storage) {
 		s.cluster.Keyspace = keyspace
@@ -34,7 +35,7 @@ func Keyspace(keyspace string) Option {
 }
 
 // New constructs and configures a new cassandra Storage,
-// ready for storing log lines in.
+// ready for storing log lines in
 func New(hosts []string, opts ...Option) (store *Storage, err error) {
 	store = &Storage{
 		cluster: gocql.NewCluster(hosts...),
@@ -55,9 +56,9 @@ func (s *Storage) Close() {
 	s.session.Close()
 }
 
-// Put inserts the implementation of Line in to cassandra.
-func (s *Storage) Put(l storage.Line, at int64) error {
-	queryStmt := `INSERT INTO clio.logs (build_id, created_at, entry_id, container_id, container_name, payload) VALUES (?,?,NOW(),?,?,?) USING TIMESTAMP ?;`
+// Write inserts an implementation of Line in to cassandra
+func (s *Storage) Write(l storage.Line) error {
+	queryStmt := `INSERT INTO clio.logs (build_id, created_at, entry_id, container_id, container_name, payload) VALUES (?,?,NOW(),?,?,?);`
 	return s.session.Bind(queryStmt, func(q *gocql.QueryInfo) ([]interface{}, error) {
 		tag := l.Tag()
 		return []interface{}{
@@ -66,7 +67,6 @@ func (s *Storage) Put(l storage.Line, at int64) error {
 			tag.ContainerID,
 			tag.ContainerName,
 			l.Payload(),
-			at,
 		}, nil
 	}).Exec()
 }

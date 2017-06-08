@@ -32,7 +32,7 @@ Apr  1 15:22:17 ip-10-27-39-73 v0/aaaaaa-bbbb-cccc-dddd-eeeeeeee/some-container-
 
 This is configurable and defined as a software interface. Initially a Cassandra implementation will be used. However, this should be pluggable.
 
-Options:
+Example options:
 
 - Cassandra
 - BigTable (GCP)
@@ -45,13 +45,21 @@ Options:
 package storage
 
 type Line interface {
-  Tag() Tag
-  CreatedAt() time.Time
-  Payload() []byte
+	Tag() Tag
+	Payload() []byte
+	CreatedAt() time.Time
 }
 
+// Writer is something which you can Write Line
+// types in to
 type Writer interface {
-  Write(Line) error
+	Write(Line) error
+}
+
+// Reader is something which returns a read-only
+// channel of lines for a given UUID.
+type Reader interface {
+	Read(uuid.UUID) (<-chan PersistedLine, error)
 }
 ```
 

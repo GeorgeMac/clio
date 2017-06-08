@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/codeship/clio/lib/storage"
-	"github.com/codeship/clio/lib/storage/cassandra"
+	"github.com/georgemac/clio/lib/storage"
+	"github.com/georgemac/clio/lib/storage/cassandra"
 
 	syslog "gopkg.in/mcuadros/go-syslog.v2"
 )

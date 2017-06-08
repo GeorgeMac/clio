@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/codeship/clio/lib/storage"
-	"github.com/codeship/clio/lib/storage/cassandra"
+	"github.com/georgemac/clio/lib/storage"
+	"github.com/georgemac/clio/lib/storage/cassandra"
 	uuid "github.com/satori/go.uuid"
 )
 

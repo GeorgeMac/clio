@@ -1,7 +1,7 @@
 package cassandra
 
 import (
-	"github.com/codeship/clio/lib/storage"
+	"github.com/georgemac/clio/lib/storage"
 	"github.com/gocql/gocql"
 )
 

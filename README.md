@@ -1,7 +1,7 @@
-Clio - Codeships Syslog Sink
+Clio - Syslog Sink
 ============================
 
-Parses syslog lines (format RFC3164) delivered using a predefined tag format, based on codeship builds and docker container IDs in to a backend database.
+Parses syslog lines (format RFC3164) delivered using a predefined tag format, based on builds and docker container IDs in to a backend database.
 
 Current draft of the syslog tag format is:
 
@@ -14,10 +14,10 @@ e.g.
 ```bash
 docker run -it --rm \
     --log-driver syslog \
-    --log-opt tag="v0/{{ (.ExtraAttributes nil).CODESHIP_BUILD_ID }}/{{ .Name }}/{{ .ID }}" \
-    --log-opt env=CODESHIP_BUILD_ID \
+    --log-opt tag="v0/{{ (.ExtraAttributes nil).BUILD_ID }}/{{ .Name }}/{{ .ID }}" \
+    --log-opt env=BUILD_ID \
     --log-opt syslog-format=rfc3164 \
-    -e CODESHIP_BUILD_ID=aaaaaa-bbbb-cccc-dddd-eeeeeeee \ 
+    -e BUILD_ID=aaaaaa-bbbb-cccc-dddd-eeeeeeee \
     --name "my-container"
 ```
 
